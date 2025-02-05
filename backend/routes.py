@@ -32,7 +32,6 @@ def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(ge
         raise HTTPException(status_code=404, detail="User not found")
     return updated_user
 
-
 # Rota para deletar um usuário
 @router.delete("/users/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
@@ -54,11 +53,3 @@ def create_recipe(user_id: int, recipe: schemas.RecipeCreate, db: Session = Depe
 def delete_recipe(recipe_id: int, db: Session = Depends(get_db)):
     crud.delete_recipe(db, recipe_id)
     return {"message": "Recipe deleted"}
-
-# Rota para atualizar uma receita
-@router.put("/recipes/{recipe_id}", response_model=schemas.Recipe)
-def update_recipe(recipe_id: int, recipe: schemas.RecipeUpdate, db: Session = Depends(get_db)):
-    updated_recipe = crud.update_recipe(db, recipe_id, recipe)
-    if updated_recipe is None:
-        raise HTTPException(status_code=404, detail="Recipe not found")
-    return updated_recipe

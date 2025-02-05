@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 from typing import Optional
 
-# Modelo para a criação de usuários
+# Modelo para criar um usuário
 class UserCreate(BaseModel):
     name: str
 
-# Modelo para representar o usuário
+# Modelo para representar um usuário
 class User(BaseModel):
     id: int
     name: str
@@ -34,5 +34,3 @@ class Recipe(RecipeCreate):
 class RecipeUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
-
-

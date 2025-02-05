@@ -3,7 +3,7 @@
     <h2 class="text-success">Receitas de {{ selectedUser.name }}</h2>
     <div v-if="recipes.length === 0">
       <p>Nenhuma receita encontrada.</p>
-      <button @click="addRecipe" class="btn btn-success">Adicionar Receita</button>
+      <button @click="showAddRecipeForm" class="btn btn-success">Adicionar Receita</button>
     </div>
     <div v-else>
       <ul class="list-group">
@@ -14,7 +14,15 @@
           <button @click="selectRecipe(recipe)" class="btn btn-danger">Excluir</button>
         </li>
       </ul>
-      <button @click="addRecipe" class="btn btn-success mt-3">Adicionar Receita</button>
+      <button @click="showAddRecipeForm" class="btn btn-success mt-3">Adicionar Receita</button>
+    </div>
+
+    <!-- Formulário para adicionar receita -->
+    <div v-if="showForm" class="mt-3">
+      <input v-model="newRecipe.title" placeholder="Título" class="form-control mb-2">
+      <input v-model="newRecipe.description" placeholder="Descrição" class="form-control mb-2">
+      <button @click="addRecipe" class="btn btn-success">Salvar</button>
+      <button @click="hideAddRecipeForm" class="btn btn-secondary">Cancelar</button>
     </div>
   </div>
 </template>
@@ -25,7 +33,15 @@ import axios from "axios";
 export default {
   props: ["selectedUser"],
   data() {
-    return { recipes: [], selectedRecipe: null };
+    return { 
+      recipes: [], 
+      selectedRecipe: null,
+      showForm: false,
+      newRecipe: {
+        title: "",
+        description: ""
+      }
+    };
   },
   watch: {
     selectedUser(newUser) {
@@ -34,14 +50,18 @@ export default {
     }
   },
   methods: {
+    showAddRecipeForm() {
+      this.showForm = true;
+    },
+    hideAddRecipeForm() {
+      this.showForm = false;
+      this.newRecipe = { title: "", description: "" };
+    },
     addRecipe() {
-      const newRecipe = {
-        title: "Nova Receita",
-        description: "Descrição da nova receita"
-      };
-      axios.post(`http://localhost:8000/users/${this.selectedUser.id}/recipes/`, newRecipe)
+      axios.post(`http://localhost:8000/users/${this.selectedUser.id}/recipes/`, this.newRecipe)
         .then(res => {
           this.recipes.push(res.data);
+          this.hideAddRecipeForm();
         });
     },
     selectRecipe(recipe) {
@@ -59,4 +79,3 @@ export default {
   }
 };
 </script>
-  
