@@ -1,17 +1,21 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional
 
 # Modelo para a criação de usuários
 class UserCreate(BaseModel):
     name: str
 
-# Modelo para representar o usuário com id na resposta
+# Modelo para representar o usuário
 class User(BaseModel):
     id: int
     name: str
 
     class Config:
-        orm_mode = True  # Para permitir a conversão de objetos ORM para pydantic models
+        orm_mode = True
+
+# Modelo para atualizar um usuário
+class UserUpdate(BaseModel):
+    name: str
 
 # Modelos para a criação de receitas
 class RecipeCreate(BaseModel):
@@ -24,12 +28,11 @@ class Recipe(RecipeCreate):
     user_id: int
 
     class Config:
-        orm_mode = True  # Para permitir a conversão de objetos ORM para pydantic models
+        orm_mode = True
 
 # Modelo para atualizar uma receita
 class RecipeUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
 
-class UserUpdate(BaseModel):
-    name: str
+
